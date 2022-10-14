@@ -1,0 +1,48 @@
+<div class="container">
+  <div class="row">
+    <div class="col"><h1 id="tableLabel">Room List</h1></div>
+    <div class="col-2">
+      <button class="btn btn-primary" (click)="goToAddRoom()">Add Room</button>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <form [formGroup]="roomListFilter" (ngSubmit)="getRoomList()" class="row row-cols-sm-auto">
+    <div class="col-12">
+      <div class="input-group">
+        <input id="date" class="form-control" placeholder="Select date" formControlName="date"
+               name="dp" [(ngModel)]="model" ngbDatepicker #d="ngbDatepicker" readonly>
+        <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"></button>
+      </div>
+    </div>
+    <div><button type="submit" class="btn btn-primary">Submit</button></div>
+  </form>
+</div>
+
+<div *ngIf="fetching" style="padding: 5px">
+  <div class="spinner-border" role="status">
+    <span class="visually-hidden">Loading...</span>
+  </div>
+</div>
+
+<div *ngIf="!fetching && roomList.length == 0" >
+  <p> Room(s) not available</p>
+</div>
+<table class='table table-striped' aria-labelledby="tableLabel" *ngIf="!fetching && roomList.length > 0">
+  <thead>
+    <tr>
+      <th>Room No.</th>
+      <th>Type</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let room of roomList">
+      <td>{{ room.number }}</td>
+      <td>{{ roomTypeGetString(room.type) }}</td>
+      <td>{{ getRoomStatus(room.number) }}</td>
+    </tr>
+  </tbody>
+</table>
+

@@ -1,0 +1,80 @@
+<h1 id="formLabel">Room Booking</h1>
+
+<ngb-alert #successMessageAlert *ngIf="successMessage" type="success" (closed)="successMessage = ''">{{ successMessage }}</ngb-alert>
+<ngb-alert #failMessageAlert *ngIf="failedMessage" type="danger" (closed)="failedMessage = ''">{{ failedMessage }}</ngb-alert>
+
+<div class="container">
+  <div class="row">
+    <div class="col-6">
+      <form [formGroup]="addBookingForm" (ngSubmit)="onFormSubmit()" class="form-control row row-cols-sm-auto">
+        <div class="container">
+          <label for="userEmail" class="form-label">User Email</label>
+          <input class="form-control" type="mail" id="userEmail" aria-describedby="User Email" formControlName="userEmail" placeholder="Enter User Email">
+        </div>
+        <div class="container mt-3">
+          <label for="roomType" class="form-label">Room Type</label>
+          <select id="roomType" class="form-select" formControlName="roomType">
+            <option *ngFor="let roomType of roomTypeKeys()"
+                    [ngValue]="roomType.key">
+              {{roomType.text}}
+            </option>
+          </select>
+        </div>
+
+        <div class="container mt-3 col-12">
+          <label for="fromDate" class="form-label">From Date</label>
+          <div class="dp-hidden position-absolute">
+            <div class="input-group">
+              <input name="datepicker"
+                     class="form-control"
+                     ngbDatepicker
+                     #datepicker="ngbDatepicker"
+                     [autoClose]="'outside'"
+                     (dateSelect)="onDateSelection($event)"
+                     [displayMonths]="2"
+                     [dayTemplate]="t"
+                     outsideDays="hidden"
+                     [startDate]="fromDate!"
+                     tabindex="-1">
+              <ng-template #t let-date let-focused="focused">
+                <span class="custom-day"
+                      [class.focused]="focused"
+                      [class.range]="isRange(date)"
+                      [class.faded]="isHovered(date) || isInside(date)"
+                      (mouseenter)="hoveredDate = date"
+                      (mouseleave)="hoveredDate = null">
+                  {{ date.day }}
+                </span>
+              </ng-template>
+            </div>
+          </div>
+          <div class="input-group" id="fromDate">
+            <input #dpFromDate
+                   class="form-control" placeholder="yyyy-mm-dd"
+                   name="dpFromDate"
+                   formControlName="from"
+                   [value]="formatter.format(fromDate)"
+                   (input)="fromDate = validateInput(fromDate, dpFromDate.value)" readonly>
+            <button class="btn btn-outline-secondary calendar" (click)="datepicker.toggle()" type="button"></button>
+          </div>
+
+        </div>
+        <div class="container mt-3 col-12">
+          <label for="toDate" class="form-label">To Date</label>
+          <div class="input-group" id="toDate">
+            <input #dpToDate
+                   class="form-control" placeholder="yyyy-mm-dd"
+                   name="dpToDate"
+                   formControlName="to"
+                   [value]="formatter.format(toDate)"
+                   (input)="toDate = validateInput(toDate, dpToDate.value)" readonly>
+            <button class="btn btn-outline-secondary calendar" (click)="datepicker.toggle()" type="button"></button>
+          </div>
+        </div>
+
+        <div class="container mt-3" ><button class="btn btn-primary" type="submit">Submit</button></div>
+      </form>
+    </div>
+  </div>
+</div>
+

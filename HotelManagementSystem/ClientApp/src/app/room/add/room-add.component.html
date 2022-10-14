@@ -1,0 +1,26 @@
+<h1 id="formLabel">Add Room</h1>
+<ngb-alert #successMessageAlert *ngIf="successMessage" type="success" (closed)="successMessage = ''">{{ successMessage }}</ngb-alert>
+<ngb-alert #failMessageAlert *ngIf="failedMessage" type="danger" (closed)="failedMessage = ''">{{ failedMessage }}</ngb-alert>
+
+<div class="container">
+  <div class="row">
+    <div class="col-6">
+      <form [formGroup]="addRoomForm" (ngSubmit)="onFormSubmit()" class="form-control">
+        <div class="container">
+          <label for="number" class="form-label">Room Number</label>
+          <input class="form-control" id="number" aria-describedby="Room number" formControlName="number" placeholder="Enter Room Number">
+        </div>
+        <div class="container mt-3">
+          <label for="type" class="form-label">Type</label>
+          <select id="type" class="form-select" formControlName="type">
+            <option *ngFor="let roomType of roomTypeKeys()"
+                    [ngValue]="roomType.key">
+              {{roomType.text}}
+            </option>
+          </select>
+        </div>
+        <div class="container mt-3" ><button class="btn btn-primary" type="submit">Submit</button></div>
+      </form>
+    </div>
+  </div>
+</div>
