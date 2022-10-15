@@ -42,6 +42,8 @@ export class AddBookingComponent {
   fromDate: NgbDate | null;
   toDate: NgbDate | null;
 
+  model = new Booking();
+
   constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string, private router: Router, private calendar: NgbCalendar, public formatter: NgbDateParserFormatter) {
     this.fromDate = calendar.getToday();
     this.toDate = calendar.getNext(calendar.getToday(), 'd', 10);
@@ -103,10 +105,10 @@ export class AddBookingComponent {
   }
 
   addBookingForm = new UntypedFormGroup({
-    userEmail: new UntypedFormControl('',[Validators.required, Validators.maxLength(50)]),
+    userEmail: new FormControl('',[Validators.required, Validators.maxLength(50)]),
     from: new FormControl(),
     to: new FormControl(),
-    roomType: new UntypedFormControl(RoomType.SINGLE)
+    roomType: new FormControl(RoomType.SINGLE)
   });
 
   dateFormatToUnixTime(date: NgbDate | null){
@@ -142,6 +144,13 @@ export class AddBookingComponent {
       }
     });
   }
+}
+
+export class Booking {
+  public userEmail! : string;
+  public from! : number;
+  public to! : number;
+  public roomType! : RoomType;
 }
 
 export interface BookingActionResponse {
