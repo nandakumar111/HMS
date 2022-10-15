@@ -1,8 +1,10 @@
-import {Component, Inject} from '@angular/core';
+import {Component, Inject, ViewChild} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import {FormControl, FormGroup} from "@angular/forms";
-import {NgbDate} from "@ng-bootstrap/ng-bootstrap";
+import {NgbAlert, NgbDate} from "@ng-bootstrap/ng-bootstrap";
+import {Subject} from "rxjs";
+import {debounceTime} from "rxjs/operators";
 
 @Component({
   selector: 'room-list',
@@ -10,7 +12,7 @@ import {NgbDate} from "@ng-bootstrap/ng-bootstrap";
 })
 
 export class RoomListComponent {
-  public roomList: Room[] = [];
+  public roomList: BookedRoom[] = [];
   public fetching: boolean = false;
   model: any;
 
@@ -19,13 +21,31 @@ export class RoomListComponent {
     today.setHours(0,0,0,0);
     this.roomListServiceReq(today);
   }
+  private _fetching = new Subject<string>();
+
+  @ViewChild('fetchingMessageAlert', {static: false}) fetchingMessageAlert: NgbAlert | undefined;
+
+  fetchingMessage = '';
+
+  ngOnInit(): void {
+    this._fetching.subscribe(message => this.fetchingMessage = message);
+    this._fetching.pipe(debounceTime(5000)).subscribe(() => {
+      if (this.fetchingMessageAlert) {
+        this.fetchingMessageAlert.close();
+      }
+    });
+  }
+
+  getToDay(){
+    return new Date().toLocaleDateString()
+  }
 
   roomListServiceReq(date: Date){
-    this.fetching = true;
-    this.http.get<Room[]>(`${this.baseUrl}api/v1/Room?date=${Math.floor(date.getTime()/1000)}`).subscribe(result => {
+    this._fetching.next("fetching...");
+    this.http.get<BookedRoom[]>(`${this.baseUrl}api/v1/Room?date=${Math.floor(date.getTime()/1000)}`).subscribe(result => {
       this.roomList = result;
     },error => console.error(error));
-    this.fetching = false;
+    this._fetching.next("Room(s) fetched successfully");
   }
 
   goToAddRoom($myParam: string = ''): void {
@@ -41,8 +61,8 @@ export class RoomListComponent {
     return types[key];
   }
 
-  getRoomStatus(roomNumber: string){
-    return "Booked"
+  getRoomStatus(booked: boolean){
+    return booked ? "Booked" : "Not Booked"
   }
 
   roomListFilter = new FormGroup({
@@ -69,4 +89,11 @@ export interface Room {
   id: string;
   number: string;
   type: RoomType;
+}
+
+export interface BookedRoom {
+  id: string;
+  number: string;
+  type: RoomType;
+  booked: boolean;
 }

@@ -6,7 +6,6 @@ import {Router} from "@angular/router";
 import {Subject} from "rxjs";
 import {NgbAlert, NgbDate, NgbCalendar, NgbDateParserFormatter} from "@ng-bootstrap/ng-bootstrap";
 import {debounceTime} from "rxjs/operators";
-import {ActionResponse} from "../room/add/room-add.component";
 
 @Component({
   selector: 'booking-add',
@@ -129,9 +128,9 @@ export class AddBookingComponent {
     reqData.from = this.dateFormatToUnixTime(this.fromDate);
     reqData.to = this.dateFormatToUnixTime(this.toDate);
 
-    this.http.post<ActionResponse>(this.baseUrl + 'api/v1/Booking', reqData).subscribe(res => {
+    this.http.post<BookingActionResponse>(this.baseUrl + 'api/v1/Booking', reqData).subscribe(res => {
       if(res.data){
-        this._success.next(res.data.message);
+        this._success.next(`${res.data.message}. Your Room Number is ${res.data.roomNumber}`);
       }else{
         this._fail.next(res.errorInfo.message);
       }
@@ -143,4 +142,17 @@ export class AddBookingComponent {
       }
     });
   }
+}
+
+export interface BookingActionResponse {
+  data: BookingData;
+  errorInfo: BookingData,
+  errors: any,
+  title: string,
+}
+
+export interface BookingData {
+  message: string,
+  statusCode: number,
+  roomNumber: string
 }

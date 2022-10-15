@@ -8,13 +8,15 @@ namespace HotelManagementSystem.Services;
 public class RoomService
 {
     private readonly IMongoCollection<Room> _roomCollection;
+    private readonly BookingService _bookingService;
 
     #region Constructor
 
-        public RoomService(IDatabaseSettings databaseSettings)
+        public RoomService(IDatabaseSettings databaseSettings, BookingService bookingService)
         {
             var database = CoreService.GetDatabase(databaseSettings);
             _roomCollection = database.GetCollection<Room>(databaseSettings.Collections.Room);
+            _bookingService = bookingService;
         }
 
     #endregion
@@ -48,11 +50,22 @@ public class RoomService
         }
     }
     
-    public ActionResult<List<Room>> GetRooms()
+    public ActionResult<List<dynamic>> GetRooms(long date = 0)
     {
         try
         {
-            return _roomCollection.Find(Builders<Room>.Filter.Empty).ToList();
+            var roomList = new List<dynamic>();
+            foreach (var room in _roomCollection.Find(Builders<Room>.Filter.Empty).ToList())
+            {
+                roomList.Add(new
+                {
+                    id = room.Id,
+                    number = room.Number,
+                    type = room.Type,
+                    booked = _bookingService.CheckRoomNumberBookingStatus(date, room.Number)
+                });
+            }
+            return roomList;
         }
         catch (Exception exception)
         {

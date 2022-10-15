@@ -27,9 +27,9 @@ public class RoomController : ControllerBase
     }
     
     [HttpGet]
-    public ActionResult<List<Room>> GetRooms()
+    public ActionResult<List<dynamic>> GetRooms([FromQuery(Name= "date")] long date)
     {
         _logger.LogInformation("GET {Scope}(s) API initiated at {DT}", Scope, DateTime.UtcNow.ToLongTimeString());
-        return _service.GetRooms();
+        return _service.GetRooms(date);
     }
 }

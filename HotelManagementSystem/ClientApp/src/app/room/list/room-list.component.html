@@ -8,28 +8,32 @@
 </div>
 
 <div class="container">
-  <form [formGroup]="roomListFilter" (ngSubmit)="getRoomList()" class="row row-cols-sm-auto">
-    <div class="col-12">
-      <div class="input-group">
-        <input id="date" class="form-control" placeholder="Select date" formControlName="date"
-               name="dp" [(ngModel)]="model" ngbDatepicker #d="ngbDatepicker" readonly>
-        <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"></button>
-      </div>
+  <div class="row">
+    <div class="col">
+      <form [formGroup]="roomListFilter" (ngSubmit)="getRoomList()" class="row row-cols-sm-auto">
+        <div class="col-12">
+          <div class="input-group">
+            <input id="date" class="form-control" placeholder="Select date" formControlName="date"
+                   name="dp" [(ngModel)]="model" ngbDatepicker #d="ngbDatepicker" readonly>
+            <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"></button>
+          </div>
+        </div>
+        <div><button type="submit" class="btn btn-primary">Submit</button></div>
+      </form>
     </div>
-    <div><button type="submit" class="btn btn-primary">Submit</button></div>
-  </form>
-</div>
-
-<div *ngIf="fetching" style="padding: 5px">
-  <div class="spinner-border" role="status">
-    <span class="visually-hidden">Loading...</span>
+    <div class="col-2">
+      <b> Today : {{getToDay()}}</b>
+    </div>
   </div>
 </div>
 
-<div *ngIf="!fetching && roomList.length == 0" >
+<ngb-alert #fetchingAlert *ngIf="fetchingMessage" type="success" (closed)="fetchingMessage = ''">{{ fetchingMessage }}</ngb-alert>
+
+<div *ngIf="roomList.length == 0" >
   <p> Room(s) not available</p>
 </div>
-<table class='table table-striped' aria-labelledby="tableLabel" *ngIf="!fetching && roomList.length > 0">
+
+<table class='table table-striped' aria-labelledby="tableLabel" *ngIf="roomList.length > 0">
   <thead>
     <tr>
       <th>Room No.</th>
@@ -41,7 +45,7 @@
     <tr *ngFor="let room of roomList">
       <td>{{ room.number }}</td>
       <td>{{ roomTypeGetString(room.type) }}</td>
-      <td>{{ getRoomStatus(room.number) }}</td>
+      <td>{{ getRoomStatus(room.booked) }}</td>
     </tr>
   </tbody>
 </table>

@@ -27,13 +27,13 @@ public class BookingController : ControllerBase
     }
 
     [HttpGet]
-    public ActionResult<List<Booking>> GetBookings([FromQuery] long date)
+    public ActionResult<List<Booking>> GetBookings([FromQuery(Name= "date")] long date)
     {
         _logger.LogInformation("GET {Scope}(s) API initiated at {DT}", Scope, DateTime.UtcNow.ToLongTimeString());
         
         return _service.GetBookings(date);
     }
-
+    
     [HttpGet("availability")]
     public ActionResult<JsonResult> CheckRoomAvailability([FromQuery(Name = "from")] long fromDate, [FromQuery(Name = "to")] long toDate, [FromQuery(Name = "type")] RoomType roomType)
     {
