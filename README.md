@@ -61,3 +61,6 @@ Implement a very simple hotel booking system for the following use cases.
   - [x] Any other special instructions should be clearly specified.
 
   - [x] Should not zip with library files (.dll or node modules) they will be built during compilation.
+  
+* ### How to create Angular project template with ASP.NET Core
+   * https://learn.microsoft.com/en-us/aspnet/core/client-side/spa/angular?view=aspnetcore-6.0&tabs=visual-studio
