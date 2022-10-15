@@ -2,6 +2,8 @@
 
 Implement a very simple hotel booking system for the following use cases.
 
+### [Application Reference Images](https://github.com/nandakumar111/HMS/tree/main/HotelManagementSystem/Images/AppReference)
+
 ## Hotel Owner Use Cases
 
 * As a hotel owner, I should be able to add new rooms so that customers can book it.
