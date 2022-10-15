@@ -46,3 +46,18 @@ Implement a very simple hotel booking system for the following use cases.
     * Button (submit)
 
     Once the user enters all the details and clicks on submit button, the system should check if there are any rooms in Not Booked status for the given conditions (date and room type). If the room is available, then the system will book the room and return the room no to the user with a success message. Otherwise, the system should show an appropriate error message.
+* ### Development instructions
+
+  Use either SQL Server or Mongo DB. The application must be developed using Angular (latest version) and Web API (.NET Core)
+
+  Important Instructions:
+
+  - [ ] Add validations wherever necessary.
+
+  - [x] Code must be compilable and executable
+
+  - [x] Should provide db scripts for the database items or a database backup file (.bak)
+
+  - [x] Any other special instructions should be clearly specified.
+
+  - [x] Should not zip with library files (.dll or node modules) they will be built during compilation.
