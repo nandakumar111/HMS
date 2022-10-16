@@ -52,7 +52,7 @@ Implement a very simple hotel booking system for the following use cases.
 
   Important Instructions:
 
-  - [ ] Add validations wherever necessary (EST : 15 Oct 2022)
+  - [ ] Add validations wherever necessary (EST : 16 Oct 2022)
 
   - [x] Code must be compilable and executable
 
